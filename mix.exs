@@ -14,7 +14,7 @@ defmodule AuditKazoo.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :runtime_tools],
+      extra_applications: [:logger, :runtime_tools, :httpoison],
       mod: {AuditKazoo.Application, []}
     ]
   end
@@ -24,7 +24,8 @@ defmodule AuditKazoo.MixProject do
     [
       {:wallaby, "~> 0.28.0", runtime: false, only: :test},
       {:plug_cowboy, "~> 2.1"},
-      {:poison, "~> 4.0"}
+      {:poison, "~> 4.0"},
+      {:httpoison, "~> 1.8"}
     ]
   end
 end
