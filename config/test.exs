@@ -5,7 +5,8 @@ config :wallaby, otp_app: :audit_kazoo
 config :wallaby, :sql_sandbox, true
 
 # Chrome
-config :wallaby, driver: Wallaby.Chrome # default
+# default
+config :wallaby, driver: Wallaby.Chrome
 
 # Selenium
 config :wallaby, driver: Wallaby.Selenium

@@ -1,8 +1,8 @@
 defmodule AuditKazoo.Router do
   use Plug.Router
 
-  plug :match
-  plug :dispatch
+  plug(:match)
+  plug(:dispatch)
 
   get "/audit" do
     send_resp(conn, 200, "Hello Elixir Plug!")

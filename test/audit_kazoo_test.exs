@@ -4,5 +4,6 @@ defmodule AuditKazooTest do
 
   test "greets the world" do
     assert AuditKazoo.hello() == :world
+    assert :ok == Application.ensure_started(:audit_kazoo)
   end
 end
