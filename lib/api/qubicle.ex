@@ -109,4 +109,32 @@ defmodule API.Qubicle do
       {:error, %{reason: reason}} -> {:error, reason}
     end
   end
+
+  @spec set_queue_membership(String.t(), %{action: any, members: any}) ::
+          {:error, any} | {:ok, any}
+  def set_queue_membership(queue_id, %{action: _action, members: _members} = membership) do
+    auth_token = Utils.get_auth_token()
+    header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
+    body = Poison.encode!(%{data: membership})
+
+    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}/recipients"
+    |> HTTPoison.post(body, header)
+    |> case do
+      {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
+      {:error, %{reason: reason}} -> {:error, reason}
+    end
+  end
+
+  @spec delete_membership(String.t()) :: {:error, any} | {:ok, any}
+  def delete_membership(queue_id) do
+    auth_token = Utils.get_auth_token()
+    header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
+
+    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}/recipients"
+    |> HTTPoison.delete(header)
+    |> case do
+      {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
+      {:error, %{reason: reason}} -> {:error, reason}
+    end
+  end
 end
