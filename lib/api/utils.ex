@@ -16,4 +16,7 @@ defmodule API.Utils do
 
   @spec get_auth_token :: String.t()
   def get_auth_token, do: Application.get_env(:audit_kazoo, :auth_token)
+
+  @spec decode(any()) :: {:ok, any()} | {:error, any()}
+  def decode(body), do: Poison.decode(body, keys: :atoms)
 end

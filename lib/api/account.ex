@@ -23,7 +23,7 @@ defmodule API.Account do
     "#{@url}:8000/v2/user_auth"
     |> HTTPoison.put(body, header)
     |> case do
-      {:ok, %{body: body, status_code: 201}} -> decode(body)
+      {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
       {:error, %{reason: reason}} -> {:error, reason}
     end
   end
@@ -36,7 +36,7 @@ defmodule API.Account do
     "#{@url}:8000/v2/accounts/#{@account_id}/about"
     |> HTTPoison.get(header)
     |> case do
-      {:ok, %{body: body, status_code: 200}} -> decode(body)
+      {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
       {:error, %{reason: reason}} -> {:error, reason}
     end
   end
@@ -49,7 +49,7 @@ defmodule API.Account do
     "#{@url}:8000/v2/accounts/#{@account_id}"
     |> HTTPoison.get(header)
     |> case do
-      {:ok, %{body: body, status_code: 200}} -> decode(body)
+      {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
       {:error, %{reason: reason}} -> {:error, reason}
     end
   end
@@ -63,7 +63,7 @@ defmodule API.Account do
     "#{@url}:8000/v2/accounts"
     |> HTTPoison.put(body, header)
     |> case do
-      {:ok, %{body: body, status_code: 201}} -> decode(body)
+      {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
       {:error, %{reason: reason}} -> {:error, reason}
     end
   end
@@ -76,7 +76,7 @@ defmodule API.Account do
     "#{@url}:8000/v2/accounts/#{account_id}"
     |> HTTPoison.delete(header)
     |> case do
-      {:ok, %{body: body, status_code: 200}} -> decode(body)
+      {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
       {:error, %{reason: reason}} -> {:error, reason}
     end
   end
@@ -86,6 +86,4 @@ defmodule API.Account do
     |> Base.encode16()
     |> String.downcase()
   end
-
-  defp decode(body), do: Poison.decode(body, keys: :atoms)
 end
