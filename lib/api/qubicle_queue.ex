@@ -1,4 +1,4 @@
-defmodule API.Qubicle do
+defmodule API.QubicleQueue do
   alias API.Utils
 
   @url Application.get_env(:audit_kazoo, :base_url)
