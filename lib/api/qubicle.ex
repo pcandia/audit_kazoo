@@ -68,8 +68,6 @@ defmodule API.Qubicle do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
       {:error, %{reason: reason}} -> {:error, reason}
     end
-
-    # 325f88a48cc1dc5ec9a10f8e660e9c5b
   end
 
   @spec modify_queue(String.t(), map()) :: {:error, any} | {:ok, any}
