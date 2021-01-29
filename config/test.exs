@@ -5,11 +5,13 @@ config :wallaby, otp_app: :audit_kazoo
 config :wallaby, :sql_sandbox, true
 
 # Chrome
-# default
-config :wallaby, driver: Wallaby.Chrome
+config :wallaby, driver: Wallaby.Chrome # default
 
 # Selenium
 config :wallaby, driver: Wallaby.Selenium
+
+config :wallaby,
+  hackney_options: [timeout: :infinity, recv_timeout: :infinity]
 
 config :audit_kazoo, base_url: System.get_env("BASE_URL")
 config :audit_kazoo, username: System.get_env("USERNAME")

@@ -6,7 +6,7 @@ defmodule API.Sup do
   @spec apply(atom() | String.t(), atom() | String.t(), atom() | String.t() | list()) ::
           {:error, any} | {:ok, any}
   def apply(module, function \\ "", args \\ []) do
-    # NOTE all modules will become a {MODULE}_maintenance
+    # NOTE all modules will become {MODULE}_maintenance
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
