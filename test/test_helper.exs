@@ -1,3 +1,3 @@
 {:ok, _} = Application.ensure_all_started(:wallaby)
-Application.put_env(:wallaby, :base_url, System.get_env("BASE_URL"))
+Application.put_env(:wallaby, :base_url, Application.get_env(:audit_kazoo, :base_url))
 ExUnit.start()

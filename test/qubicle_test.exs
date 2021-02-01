@@ -1,5 +1,5 @@
 defmodule QubicleTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use Wallaby.Feature
 
   import Wallaby.Query, only: [text_field: 1, button: 1]
