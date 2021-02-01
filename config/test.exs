@@ -5,10 +5,7 @@ config :wallaby, otp_app: :audit_kazoo
 config :wallaby, :sql_sandbox, true
 
 # Chrome
-config :wallaby, driver: Wallaby.Chrome # default
-
-# Selenium
-config :wallaby, driver: Wallaby.Selenium
+config :wallaby, driver: Wallaby.Chrome
 
 config :wallaby,
   hackney_options: [timeout: :infinity, recv_timeout: :infinity]

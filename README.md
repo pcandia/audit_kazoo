@@ -1,22 +1,7 @@
 # AuditKazoo
 
-**TODO: Add description**
+This repo's main goal is to enable developers to run some integration tests for [kazoo](https://github.com/2600hz/kazoo) and its family applications.
 
-## Installation
+If you want to write tests for the [monster-UI](https://github.com/2600hz/monster-ui), take a look at the [wallaby](https://github.com/elixir-wallaby/wallaby) documentation, it shows what you can do with the library.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `audit_kazoo` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:audit_kazoo, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/audit_kazoo](https://hexdocs.pm/audit_kazoo).
-
-# audit_kazoo
+This repo also provides a client consumer for Kazoo's API.

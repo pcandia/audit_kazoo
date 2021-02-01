@@ -17,26 +17,25 @@ defmodule QubicleTest do
 
   describe "qubicle test" do
     test "check qubicle recipient availability state", %{session: session} do
-      _first_session =
-        visit(session, "/")
-        |> fill_in(text_field("Username"), with: @username)
-        |> fill_in(text_field("Password"), with: @password)
-        |> fill_in(text_field("Account Name"), with: @account_name)
-        |> click(Query.css(".login"))
-        |> assert_has(Query.css(".progress-indicator"))
-        |> visit("/#/apps/webhooks")
-        |> assert_has(Query.css(".webhooks-header"))
-        |> visit("/#/apps/callqueues-pro")
-        |> assert_has(
-          Query.text(
-            "Hi Account Admin! Begin your session when you're ready to enter your queues.",
-            count: 1
-          )
+      visit(session, "/")
+      |> fill_in(text_field("Username"), with: @username)
+      |> fill_in(text_field("Password"), with: @password)
+      |> fill_in(text_field("Account Name"), with: @account_name)
+      |> click(Query.css(".login"))
+      |> assert_has(Query.css(".progress-indicator"))
+      |> visit("/#/apps/webhooks")
+      |> assert_has(Query.css(".webhooks-header"))
+      |> visit("/#/apps/callqueues-pro")
+      |> assert_has(
+        Query.text(
+          "Hi Account Admin! Begin your session when you're ready to enter your queues.",
+          count: 1
         )
-        |> click(button("Begin Session"))
-        |> assert_has(Query.text("Queues", count: 1))
+      )
+      |> click(button("Begin Session"))
+      |> assert_has(Query.text("Queues", count: 1))
 
-      assert {:ok, %{data: list_recipients}} = Recipient.list_recipients()
+      {:ok, %{data: list_recipients}} = Recipient.list_recipients()
 
       recip_id =
         Enum.find(list_recipients, fn %{roles: roles} -> Map.values(roles) == ["Admin"] end)
