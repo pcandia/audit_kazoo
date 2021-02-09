@@ -8,3 +8,6 @@ This repo also provides a client consumer for Kazoo's API.
 
 We might use Google Chrome, Mozilla Firefox, or selenium to run the browser tests. By default, we are using google chrome
 which requires the [ChromeDriver](https://chromedriver.chromium.org/downloads) installation with the same version of your local browser.
+
+Make sure sup module is running in the Kazoo API
+`crossbar_maintenance:start_module(cb_sup).`
