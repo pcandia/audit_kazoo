@@ -25,7 +25,8 @@ defmodule AuditKazoo.MixProject do
       {:wallaby, "~> 0.28.0", runtime: false, only: :test},
       {:plug_cowboy, "~> 2.1"},
       {:poison, "~> 4.0"},
-      {:httpoison, "~> 1.8"}
+      {:httpoison, "~> 1.8"},
+      {:configparser_ex, "~> 4.0"}
     ]
   end
 end
