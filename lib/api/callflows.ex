@@ -72,7 +72,8 @@ defmodule API.Callflows do
     end
   end
 
-  @spec change_callflow(String.t(), map()) :: {:error, any} | {:ok, any}
+  @spec change_callflow(String.t(), %{name: String.t(), numbers: list(), patterns: list()}) ::
+          {:error, any} | {:ok, any}
   def change_callflow(callflow_id, data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]

@@ -1,5 +1,6 @@
 defmodule AuditKazoo.Router do
   use Plug.Router
+  use Plug.Debugger, otp_app: :audit_kazoo
 
   plug(:match)
   plug(:dispatch)
@@ -15,10 +16,23 @@ defmodule AuditKazoo.Router do
   end
 
   post "/events" do
+    headers = conn.req_headers
+    {:ok, body, conn} = Plug.Conn.read_body(conn, opts)
+    format = :proplists.get_value("content-type", headers)
+    _ = decode_body(format, body)
+
     send_resp(conn, 200, "ok")
   end
 
   match _ do
     send_resp(conn, 404, "Oops!")
+  end
+
+  defp decode_body("application/json", body), do: Poison.decode(body, keys: :atoms)
+
+  defp decode_body("form-data", body) do
+    URI.query_decoder(body)
+    |> Enum.map(& &1)
+    |> Enum.into(%{})
   end
 end
