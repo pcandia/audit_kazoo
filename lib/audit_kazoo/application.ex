@@ -4,6 +4,7 @@ defmodule AuditKazoo.Application do
 
   def start(_type, _args) do
     children = [
+      AuditKazoo.Server,
       {Plug.Cowboy, scheme: :http, plug: AuditKazoo.Router, options: [port: 4000]}
     ]
 

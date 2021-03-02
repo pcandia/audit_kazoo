@@ -19,8 +19,8 @@ defmodule AuditKazoo.Router do
     headers = conn.req_headers
     {:ok, body, conn} = Plug.Conn.read_body(conn, opts)
     format = :proplists.get_value("content-type", headers)
-    _ = decode_body(format, body)
-
+    {:ok, event} = decode_body(format, body)
+    :ok = AuditKazoo.Server.add_event(event)
     send_resp(conn, 200, "ok")
   end
 
