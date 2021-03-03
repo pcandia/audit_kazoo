@@ -1,4 +1,4 @@
-defmodule QubicleTest do
+defmodule ExampleTest do
   use ExUnit.Case, async: true
   use Wallaby.Feature
 
@@ -11,7 +11,7 @@ defmodule QubicleTest do
   @password Application.get_env(:audit_kazoo, :password)
   @account_name Application.get_env(:audit_kazoo, :account_name)
 
-  describe "qubicle test" do
+  describe "integration tests" do
     test "check qubicle recipient availability state", %{session: session} do
       visit(session, "/")
       |> fill_in(text_field("Username"), with: @username)
@@ -39,11 +39,12 @@ defmodule QubicleTest do
 
       {:ok, %{data: data}} = Recipient.get_recipient_status(recip_id)
       assert data.availability_state == "Away"
+      {:ok, %{data: %{action: "logout"}}} = Recipient.logout_recipient(recip_id)
     end
 
     test "test qubicle start and stop session", %{session: session} do
-      UI.kazoo_login(session)
-      |> UI.kazoo_logout()
+      UI.login(session)
+      |> UI.logout()
     end
   end
 end
