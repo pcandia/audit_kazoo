@@ -42,7 +42,7 @@ defmodule ExampleTest do
       {:ok, %{data: %{action: "logout"}}} = Recipient.logout_recipient(recip_id)
     end
 
-    test "test qubicle start and stop session", %{session: session} do
+    test "kazoo UI login and logout", %{session: session} do
       UI.login(session)
       |> UI.logout()
     end
