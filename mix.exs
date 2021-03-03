@@ -6,6 +6,7 @@ defmodule AuditKazoo.MixProject do
       app: :audit_kazoo,
       version: "0.1.0",
       elixir: "~> 1.10",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -29,4 +30,7 @@ defmodule AuditKazoo.MixProject do
       {:configparser_ex, "~> 4.0"}
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 end

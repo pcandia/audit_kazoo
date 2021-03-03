@@ -5,15 +5,11 @@ defmodule QubicleTest do
   import Wallaby.Query, only: [text_field: 1, button: 1]
 
   alias API.QubicleRecipient, as: Recipient
+  alias MonsterUi, as: UI
 
   @username Application.get_env(:audit_kazoo, :username)
   @password Application.get_env(:audit_kazoo, :password)
   @account_name Application.get_env(:audit_kazoo, :account_name)
-
-  setup_all do
-    :ok = API.Utils.set_auth_token()
-    {:ok, []}
-  end
 
   describe "qubicle test" do
     test "check qubicle recipient availability state", %{session: session} do
@@ -43,6 +39,11 @@ defmodule QubicleTest do
 
       {:ok, %{data: data}} = Recipient.get_recipient_status(recip_id)
       assert data.availability_state == "Away"
+    end
+
+    test "test qubicle start and stop session", %{session: session} do
+      UI.kazoo_login(session)
+      |> UI.kazoo_logout()
     end
   end
 end
