@@ -23,3 +23,5 @@ erl_crash.dump
 audit_kazoo-*.tar
 
 .elixir_ls/
+
+/libwebphone/
