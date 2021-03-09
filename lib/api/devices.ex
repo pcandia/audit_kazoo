@@ -4,6 +4,32 @@ defmodule API.Devices do
   @url Application.get_env(:audit_kazoo, :base_url)
   @account_id Application.get_env(:audit_kazoo, :account_id)
 
+  @type device :: %{
+          name: String.t(),
+          call_forward: map(),
+          call_restriction: map(),
+          caller_id_options: map(),
+          contact_list: map(),
+          device_type: String.t(),
+          do_not_disturb: map(),
+          enabled: boolean(),
+          exclude_from_queues: boolean(),
+          flags: list(),
+          hotdesk: map(),
+          language: String.t(),
+          mac_address: String.t(),
+          music_on_hold: map(),
+          mwi_unsolicited_updates: boolean(),
+          outbound_flags: map(),
+          owner_id: String.t(),
+          presence_id: String.t(),
+          provision: map(),
+          register_overwrite_notify: boolean(),
+          ringtones: map(),
+          sip: map(),
+          suppress_unregister_notifications: boolean()
+        }
+
   @spec fetch_devices() :: {:error, any} | {:ok, any}
   def fetch_devices do
     auth_token = Utils.get_auth_token()
@@ -56,11 +82,11 @@ defmodule API.Devices do
     end
   end
 
-  @spec create_new_device(String.t()) :: {:error, any} | {:ok, any}
-  def create_new_device(device_name) do
+  @spec create_new_device(device()) :: {:error, any} | {:ok, any}
+  def create_new_device(%{name: _device_name} = data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
-    body = Poison.encode!(%{data: %{name: device_name}})
+    body = Poison.encode!(%{data: data})
 
     "#{@url}:8000/v2/accounts/#{@account_id}/devices"
     |> HTTPoison.put(body, header)

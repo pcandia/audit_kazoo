@@ -1,4 +1,3 @@
-
 use Mix.Config
 
 config :wallaby, otp_app: :audit_kazoo

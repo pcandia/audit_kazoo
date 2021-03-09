@@ -4,6 +4,23 @@ defmodule API.ClickToCall do
   @url Application.get_env(:audit_kazoo, :base_url)
   @account_id Application.get_env(:audit_kazoo, :account_id)
 
+  @type click_to_call :: %{
+          name: String.t(),
+          extension: String.t(),
+          auth_required: boolean(),
+          caller_id_number: String.t(),
+          custom_application_vars: map(),
+          dial_first: String.t(),
+          media: map(),
+          music_on_hold: map(),
+          outbound_callee_id_name: String.t(),
+          outbound_callee_id_number: String.t(),
+          presence_id: String.t(),
+          ringback: String.t(),
+          throttle: integer(),
+          whitelist: list()
+        }
+
   @spec list_click_to_call_endpoints() :: {:error, any} | {:ok, any}
   def list_click_to_call_endpoints do
     auth_token = Utils.get_auth_token()
@@ -17,9 +34,9 @@ defmodule API.ClickToCall do
     end
   end
 
-  @spec create_click_to_call(%{name: String.t(), auth_required: boolean(), extension: String.t()}) ::
+  @spec create_click_to_call(click_to_call()) ::
           {:error, any} | {:ok, any}
-  def create_click_to_call(%{name: _, auth_required: _, extension: _} = data) do
+  def create_click_to_call(%{name: _, extension: _} = data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})

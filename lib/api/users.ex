@@ -57,7 +57,7 @@ defmodule API.Users do
     end
   end
 
-  @spec create_user(%{first_name: String.t(), last_name: String.t()}) ::
+  @spec create_user(user()) ::
           {:error, any} | {:ok, any}
   def create_user(%{first_name: _, last_name: _} = data) do
     auth_token = Utils.get_auth_token()
