@@ -4,6 +4,21 @@ defmodule API.QubicleQueue do
   @url Application.get_env(:audit_kazoo, :base_url)
   @account_id Application.get_env(:audit_kazoo, :account_id)
 
+  @type qubicle_queue :: %{
+          name: String.t(),
+          queue_type: String.t(),
+          agent_wrapup_time: integer(),
+          force_away_on_reject: boolean(),
+          hold_treatment: String.t(),
+          queue_router: String.t(),
+          timeout_redirect: String.t(),
+          timeout_immediately_if_empty: boolean(),
+          timeout_if_size_exceeds: integer(),
+          ring_timeout: integer(),
+          tick_time: integer(),
+          timeout: integer()
+        }
+
   @spec list_queues :: {:error, any} | {:ok, any}
   def list_queues do
     auth_token = Utils.get_auth_token()
@@ -56,11 +71,11 @@ defmodule API.QubicleQueue do
     end
   end
 
-  @spec create_queue(String.t()) :: {:error, any} | {:ok, any}
-  def create_queue(queue_name) do
+  @spec create_queue(qubicle_queue()) :: {:error, any} | {:ok, any}
+  def create_queue(%{name: _} = data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
-    body = Poison.encode!(%{data: %{name: queue_name}})
+    body = Poison.encode!(%{data: data})
 
     "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues"
     |> HTTPoison.put(body, header)
@@ -70,7 +85,7 @@ defmodule API.QubicleQueue do
     end
   end
 
-  @spec modify_queue(String.t(), map()) :: {:error, any} | {:ok, any}
+  @spec modify_queue(String.t(), qubicle_queue()) :: {:error, any} | {:ok, any}
   def modify_queue(queue_id, queue_data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]

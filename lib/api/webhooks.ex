@@ -4,6 +4,19 @@ defmodule API.Webhooks do
   @url Application.get_env(:audit_kazoo, :base_url)
   @account_id Application.get_env(:audit_kazoo, :account_id)
 
+  @type webhook :: %{
+          name: String.t(),
+          uri: String.t(),
+          hook: String.t(),
+          format: String.t(),
+          enabled: boolean(),
+          http_verb: String.t(),
+          retries: integer(),
+          include_subaccounts: map(),
+          include_internal_legs: map(),
+          custom_data: map()
+        }
+
   @spec fetch_webhooks() :: {:error, any} | {:ok, any}
   def fetch_webhooks do
     auth_token = Utils.get_auth_token()
@@ -30,8 +43,8 @@ defmodule API.Webhooks do
     end
   end
 
-  @spec create_webhook(map()) :: {:error, any} | {:ok, any}
-  def create_webhook(%{name: _, uri: _, http_verb: _, hook: _, retries: _} = data) do
+  @spec create_webhook(webhook()) :: {:error, any} | {:ok, any}
+  def create_webhook(%{name: _, uri: _, hook: _} = data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
@@ -44,8 +57,8 @@ defmodule API.Webhooks do
     end
   end
 
-  @spec edit_webhook(String.t(), map()) :: {:error, any} | {:ok, any}
-  def edit_webhook(webhook_id, %{name: _, uri: _, http_verb: _, hook: _, retries: _} = data) do
+  @spec edit_webhook(String.t(), webhook()) :: {:error, any} | {:ok, any}
+  def edit_webhook(webhook_id, %{name: _, uri: _, hook: _} = data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
