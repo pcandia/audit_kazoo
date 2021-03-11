@@ -1,15 +1,12 @@
 defmodule API.Callflows do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @spec fetch_callflows() :: {:error, any} | {:ok, any}
   def fetch_callflows do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/callflows"
+    (Utils.build_url_with_account() <> "callflows")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -22,7 +19,7 @@ defmodule API.Callflows do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/callflows/#{callflow_id}"
+    (Utils.build_url_with_account() <> "callflows/#{callflow_id}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -37,7 +34,7 @@ defmodule API.Callflows do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/callflows"
+    (Utils.build_url_with_account() <> "callflows")
     |> HTTPoison.put(body, header)
     |> case do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
@@ -50,7 +47,7 @@ defmodule API.Callflows do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/callflows/#{callflow_id}"
+    (Utils.build_url_with_account() <> "callflows/#{callflow_id}")
     |> HTTPoison.delete(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -64,7 +61,7 @@ defmodule API.Callflows do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/callflows/#{callflow_id}"
+    (Utils.build_url_with_account() <> "callflows/#{callflow_id}")
     |> HTTPoison.patch(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -79,7 +76,7 @@ defmodule API.Callflows do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/callflows/#{callflow_id}"
+    (Utils.build_url_with_account() <> "callflows/#{callflow_id}")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

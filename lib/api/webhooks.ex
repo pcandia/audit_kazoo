@@ -1,9 +1,6 @@
 defmodule API.Webhooks do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @type webhook :: %{
           name: String.t(),
           uri: String.t(),
@@ -22,7 +19,7 @@ defmodule API.Webhooks do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/webhooks"
+    (Utils.build_url_with_account() <> "webhooks")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -35,7 +32,7 @@ defmodule API.Webhooks do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/webhooks"
+    (Utils.build_url_with_account() <> "webhooks")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -49,7 +46,7 @@ defmodule API.Webhooks do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/webhooks"
+    (Utils.build_url_with_account() <> "webhooks")
     |> HTTPoison.put(body, header)
     |> case do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
@@ -63,7 +60,7 @@ defmodule API.Webhooks do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/webhooks/#{webhook_id}"
+    (Utils.build_url_with_account() <> "webhooks/#{webhook_id}")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -76,7 +73,7 @@ defmodule API.Webhooks do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/webhooks/#{webhook_id}"
+    (Utils.build_url_with_account() <> "webhooks/#{webhook_id}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -90,7 +87,7 @@ defmodule API.Webhooks do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: %{enabled: action}})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/webhooks/#{webhook_id}"
+    (Utils.build_url_with_account() <> "webhooks/#{webhook_id}")
     |> HTTPoison.patch(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -103,7 +100,7 @@ defmodule API.Webhooks do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/webhooks/#{webhook_id}"
+    (Utils.build_url_with_account() <> "webhooks/#{webhook_id}")
     |> HTTPoison.delete(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

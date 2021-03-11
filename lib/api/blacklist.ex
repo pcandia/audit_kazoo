@@ -1,9 +1,6 @@
 defmodule API.Blacklist do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @type blacklist :: %{
           name: String.t(),
           numbers: map(),
@@ -15,7 +12,7 @@ defmodule API.Blacklist do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/blacklists"
+    (Utils.build_url_with_account() <> "blacklists")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -28,7 +25,7 @@ defmodule API.Blacklist do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/blacklists/#{blacklist_id}"
+    (Utils.build_url_with_account() <> "blacklists/#{blacklist_id}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -42,7 +39,7 @@ defmodule API.Blacklist do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/blacklists"
+    (Utils.build_url_with_account() <> "blacklists")
     |> HTTPoison.put(body, header)
     |> case do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
@@ -56,7 +53,7 @@ defmodule API.Blacklist do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/blacklists/#{blacklist_id}"
+    (Utils.build_url_with_account() <> "blacklists/#{blacklist_id}")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -69,7 +66,7 @@ defmodule API.Blacklist do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/blacklists/#{blacklist_id}"
+    (Utils.build_url_with_account() <> "blacklists/#{blacklist_id}")
     |> HTTPoison.delete(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -83,7 +80,7 @@ defmodule API.Blacklist do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/blacklists/#{blacklist_id}"
+    (Utils.build_url_with_account() <> "blacklists/#{blacklist_id}")
     |> HTTPoison.patch(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

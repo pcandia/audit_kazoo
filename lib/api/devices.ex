@@ -1,9 +1,6 @@
 defmodule API.Devices do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @type device :: %{
           name: String.t(),
           call_forward: map(),
@@ -35,7 +32,7 @@ defmodule API.Devices do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices"
+    (Utils.build_url_with_account() <> "devices")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -48,7 +45,7 @@ defmodule API.Devices do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices/#{device_id}"
+    (Utils.build_url_with_account() <> "devices/#{device_id}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -61,7 +58,7 @@ defmodule API.Devices do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices/status"
+    (Utils.build_url_with_account() <> "devices/status")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -74,7 +71,7 @@ defmodule API.Devices do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices/#{device_id}/sync"
+    (Utils.build_url_with_account() <> "devices/#{device_id}/sync")
     |> HTTPoison.post("", header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -88,7 +85,7 @@ defmodule API.Devices do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices"
+    (Utils.build_url_with_account() <> "devices")
     |> HTTPoison.put(body, header)
     |> case do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
@@ -101,7 +98,7 @@ defmodule API.Devices do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices/#{device_id}"
+    (Utils.build_url_with_account() <> "devices/#{device_id}")
     |> HTTPoison.delete(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -115,7 +112,7 @@ defmodule API.Devices do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: device})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices/#{device.id}"
+    (Utils.build_url_with_account() <> "devices/#{device.id}")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

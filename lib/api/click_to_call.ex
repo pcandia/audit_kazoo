@@ -1,9 +1,6 @@
 defmodule API.ClickToCall do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @type click_to_call :: %{
           name: String.t(),
           extension: String.t(),
@@ -26,7 +23,7 @@ defmodule API.ClickToCall do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/clicktocall"
+    (Utils.build_url_with_account() <> "clicktocall")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -41,7 +38,7 @@ defmodule API.ClickToCall do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/clicktocall"
+    (Utils.build_url_with_account() <> "clicktocall")
     |> HTTPoison.put(body, header)
     |> case do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
@@ -54,7 +51,7 @@ defmodule API.ClickToCall do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/clicktocall/#{c2c_id}"
+    (Utils.build_url_with_account() <> "clicktocall/#{c2c_id}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -72,7 +69,7 @@ defmodule API.ClickToCall do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/clicktocall/#{c2c_id}"
+    (Utils.build_url_with_account() <> "clicktocall/#{c2c_id}")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
@@ -85,7 +82,7 @@ defmodule API.ClickToCall do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/clicktocall/#{c2c_id}"
+    (Utils.build_url_with_account() <> "clicktocall/#{c2c_id}")
     |> HTTPoison.delete(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -98,7 +95,7 @@ defmodule API.ClickToCall do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/clicktocall/#{c2c_id}/connect?contact=#{contact}"
+    (Utils.build_url_with_account() <> "clicktocall/#{c2c_id}/connect?contact=#{contact}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

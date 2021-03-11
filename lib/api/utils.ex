@@ -19,4 +19,21 @@ defmodule API.Utils do
 
   @spec decode(any()) :: {:ok, any()} | {:error, any()}
   def decode(body), do: Poison.decode(body, keys: :atoms)
+
+  @spec build_url() :: String.t()
+  def build_url do
+    protocol =
+      Application.get_env(:audit_kazoo, :protocol)
+      |> Atom.to_string()
+
+    uri = Application.get_env(:audit_kazoo, :base_url)
+
+    "#{protocol}://#{uri}:8000/v2/"
+  end
+
+  @spec build_url_with_account() :: String.t()
+  def build_url_with_account do
+    account_id = Application.get_env(:audit_kazoo, :account_id)
+    build_url() <> "accounts/#{account_id}/"
+  end
 end

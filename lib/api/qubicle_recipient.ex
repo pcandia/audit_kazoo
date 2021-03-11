@@ -1,15 +1,12 @@
 defmodule API.QubicleRecipient do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @spec list_recipients() :: {:error, any} | {:ok, any}
   def list_recipients do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_recipients"
+    (Utils.build_url_with_account() <> "qubicle_recipients")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -22,7 +19,7 @@ defmodule API.QubicleRecipient do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_recipients/#{user_id}/status"
+    (Utils.build_url_with_account() <> "qubicle_recipients/#{user_id}/status")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -36,7 +33,7 @@ defmodule API.QubicleRecipient do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: %{recipient_ids: recipient_ids}})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_recipients/status"
+    (Utils.build_url_with_account() <> "qubicle_recipients/status")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -63,7 +60,7 @@ defmodule API.QubicleRecipient do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: %{status: status}})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_recipients/#{recipient_id}/status"
+    (Utils.build_url_with_account() <> "qubicle_recipients/#{recipient_id}/status")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -78,7 +75,7 @@ defmodule API.QubicleRecipient do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: %{action: :monitor, target: recipient_id, mode: action}})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_recipients/#{recipient_id}"
+    (Utils.build_url_with_account() <> "qubicle_recipients/#{recipient_id}")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -91,7 +88,7 @@ defmodule API.QubicleRecipient do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: %{action: action}})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_recipients/#{recipient_id}"
+    (Utils.build_url_with_account() <> "qubicle_recipients/#{recipient_id}")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

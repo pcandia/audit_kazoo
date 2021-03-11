@@ -1,15 +1,12 @@
 defmodule API.QuickCall do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @spec call_device(String.t(), String.t()) :: {:error, any} | {:ok, any}
   def call_device(device_id, phone_number) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices/#{device_id}/quickcall/#{phone_number}"
+    (Utils.build_url_with_account() <> "devices/#{device_id}/quickcall/#{phone_number}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -22,7 +19,7 @@ defmodule API.QuickCall do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/users/#{user_id}/quickcall/#{phone_number}"
+    (Utils.build_url_with_account() <> "users/#{user_id}/quickcall/#{phone_number}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

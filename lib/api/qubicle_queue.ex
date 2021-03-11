@@ -1,9 +1,6 @@
 defmodule API.QubicleQueue do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
-  @account_id Application.get_env(:audit_kazoo, :account_id)
-
   @type qubicle_queue :: %{
           name: String.t(),
           queue_type: String.t(),
@@ -24,7 +21,7 @@ defmodule API.QubicleQueue do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues"
+    (Utils.build_url_with_account() <> "qubicle_queues")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -37,7 +34,7 @@ defmodule API.QubicleQueue do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/status"
+    (Utils.build_url_with_account() <> "qubicle_queues/status")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -50,7 +47,7 @@ defmodule API.QubicleQueue do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}"
+    (Utils.build_url_with_account() <> "qubicle_queues/#{queue_id}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -63,7 +60,7 @@ defmodule API.QubicleQueue do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}/status"
+    (Utils.build_url_with_account() <> "qubicle_queues/#{queue_id}/status")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -77,7 +74,7 @@ defmodule API.QubicleQueue do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues"
+    (Utils.build_url_with_account() <> "qubicle_queues")
     |> HTTPoison.put(body, header)
     |> case do
       {:ok, %{body: body, status_code: 201}} -> Utils.decode(body)
@@ -91,7 +88,7 @@ defmodule API.QubicleQueue do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: queue_data})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}"
+    (Utils.build_url_with_account() <> "qubicle_queues/#{queue_id}")
     |> HTTPoison.patch(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -104,7 +101,7 @@ defmodule API.QubicleQueue do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}/sessions"
+    (Utils.build_url_with_account() <> "qubicle_queues/#{queue_id}/sessions")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -117,7 +114,7 @@ defmodule API.QubicleQueue do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}/recipients"
+    (Utils.build_url_with_account() <> "qubicle_queues/#{queue_id}/recipients")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -132,7 +129,7 @@ defmodule API.QubicleQueue do
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: membership})
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}/recipients"
+    (Utils.build_url_with_account() <> "qubicle_queues/#{queue_id}/recipients")
     |> HTTPoison.post(body, header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -145,7 +142,7 @@ defmodule API.QubicleQueue do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/qubicle_queues/#{queue_id}/recipients"
+    (Utils.build_url_with_account() <> "qubicle_queues/#{queue_id}/recipients")
     |> HTTPoison.delete(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)

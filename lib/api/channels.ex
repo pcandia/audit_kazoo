@@ -1,7 +1,6 @@
 defmodule API.Channels do
   alias API.Utils
 
-  @url Application.get_env(:audit_kazoo, :base_url)
   @account_id Application.get_env(:audit_kazoo, :account_id)
 
   @spec fetch_channels() :: {:error, any} | {:ok, any}
@@ -9,7 +8,7 @@ defmodule API.Channels do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/channels"
+    (Utils.build_url() <> "channels")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -23,7 +22,7 @@ defmodule API.Channels do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{account_id}/channels"
+    (Utils.build_url() <> "accounts/#{account_id}/channels")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -36,7 +35,7 @@ defmodule API.Channels do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/users/#{user_id}/channels"
+    (Utils.build_url_with_account() <> "users/#{user_id}/channels")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -49,7 +48,7 @@ defmodule API.Channels do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/devices/#{device_id}/channels"
+    (Utils.build_url_with_account() <> "devices/#{device_id}/channels")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
@@ -62,7 +61,7 @@ defmodule API.Channels do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
 
-    "#{@url}:8000/v2/accounts/#{@account_id}/channels/#{channel_id}"
+    (Utils.build_url_with_account() <> "channels/#{channel_id}")
     |> HTTPoison.get(header)
     |> case do
       {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
