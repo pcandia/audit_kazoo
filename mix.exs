@@ -27,7 +27,8 @@ defmodule AuditKazoo.MixProject do
       {:plug_cowboy, "~> 2.1"},
       {:poison, "~> 4.0"},
       {:httpoison, "~> 1.8"},
-      {:configparser_ex, "~> 4.0"}
+      {:configparser_ex, "~> 4.0"},
+      {:websockex, "~> 0.4.2"}
     ]
   end
 
