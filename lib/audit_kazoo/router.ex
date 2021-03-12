@@ -4,8 +4,17 @@ defmodule AuditKazoo.Router do
 
   require EEx
 
-  plug Plug.Static, at: "/dist", from: "libwebphone/dist/"
+  alias API.Utils
+
+  plug(Plug.Static, at: "/dist", from: "libwebphone/dist/")
   plug(:match)
+
+  plug(Plug.Parsers,
+    parsers: [:json],
+    pass: ["application/json"],
+    json_decoder: Jason
+  )
+
   plug(:dispatch)
 
   @url Application.get_env(:audit_kazoo, :base_url)
@@ -15,20 +24,38 @@ defmodule AuditKazoo.Router do
   @sip_callee_password Application.get_env(:audit_kazoo, :sip_callee_password)
   @realm Application.get_env(:audit_kazoo, :realm, "realm.com")
 
-  get "" do
+  get "/" do
     localhost_ip =
       conn.remote_ip
       |> :inet_parse.ntoa()
       |> to_string()
 
     Application.put_env(:audit_kazoo, :webhook_uri, localhost_ip)
-    page_contents = EEx.eval_file("libwebphone/redphone.eex", [base_url: @url, sip_username: @sip_caller_username, sip_password: @sip_caller_password, realm: @realm])
+    send_resp(conn, 200, "ok")
+  end
+
+  get "/redphone" do
+    page_contents =
+      EEx.eval_file("libwebphone/redphone.html.eex",
+        base_url: @url,
+        sip_username: @sip_caller_username,
+        sip_password: @sip_caller_password,
+        realm: @realm
+      )
+
     conn = Plug.Conn.put_resp_content_type(conn, "text/html")
     send_resp(conn, 200, page_contents)
   end
 
   get "/telephone" do
-    page_contents = EEx.eval_file("libwebphone/telephone.eex", [base_url: @url, sip_username: @sip_callee_username, sip_password: @sip_callee_password, realm: @realm])
+    page_contents =
+      EEx.eval_file("libwebphone/telephone.html.eex",
+        base_url: @url,
+        sip_username: @sip_callee_username,
+        sip_password: @sip_callee_password,
+        realm: @realm
+      )
+
     conn = Plug.Conn.put_resp_content_type(conn, "text/html")
     send_resp(conn, 200, page_contents)
   end

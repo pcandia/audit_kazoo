@@ -5,10 +5,9 @@ defmodule AuditKazoo.Application do
   def start(_type, _args) do
     children = [
       AuditKazoo.Server,
-      {Plug.Cowboy, scheme: :http, plug: AuditKazoo.Router, options: [port: 4000]}
+      {Plug.Cowboy, scheme: :http, plug: AuditKazoo.Router, options: [port: 8080]}
     ]
 
-    Logger.info("Visit: http://localhost:4000")
     opts = [strategy: :one_for_one, name: AuditKazoo.Supervisor]
     Supervisor.start_link(children, opts)
   end
