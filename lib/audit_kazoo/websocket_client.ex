@@ -34,9 +34,13 @@ defmodule AuditKazoo.WebsocketClient do
 
   @spec unsubscribe(pid(), String.t() | list()) :: :ok
   def unsubscribe(pid, binding) when is_bitstring(binding), do: unsubscribe(pid, [binding])
+
   def unsubscribe(pid, bindings) when is_list(bindings) do
     auth_token = Utils.get_auth_token()
-    message = Poison.encode!(%{action: "unsubscribe", auth_token: auth_token, data: %{bindings: bindings}})
+
+    message =
+      Poison.encode!(%{action: "unsubscribe", auth_token: auth_token, data: %{bindings: bindings}})
+
     Logger.info("Unbindings to: #{message}")
     WebSockex.send_frame(pid, {:text, message})
   end
@@ -62,9 +66,10 @@ defmodule AuditKazoo.WebsocketClient do
   end
 
   def handle_disconnect(%{reason: {:local, reason}}, state) do
-    Logger.info("Local close with reason: #{inspect reason}")
+    Logger.info("Local close with reason: #{inspect(reason)}")
     {:ok, state}
   end
+
   def handle_disconnect(disconnect_map, state) do
     super(disconnect_map, state)
   end

@@ -27,8 +27,9 @@ defmodule API.Utils do
       |> Atom.to_string()
 
     uri = Application.get_env(:audit_kazoo, :base_url)
+    port = Application.get_env(:audit_kazoo, :port)
 
-    "#{protocol}://#{uri}:8000/v2/"
+    "#{protocol}://#{uri}:#{port}/v2/"
   end
 
   @spec build_url_with_account() :: String.t()
