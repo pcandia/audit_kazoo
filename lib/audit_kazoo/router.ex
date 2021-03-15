@@ -4,8 +4,6 @@ defmodule AuditKazoo.Router do
 
   require EEx
 
-  alias API.Utils
-
   plug(Plug.Static, at: "/dist", from: "libwebphone/dist/")
   plug(:match)
 
@@ -36,7 +34,7 @@ defmodule AuditKazoo.Router do
 
   get "/redphone" do
     page_contents =
-      EEx.eval_file("libwebphone/redphone.html.eex",
+      EEx.eval_file("lib/audit_kazoo/templates/redphone.html.eex",
         base_url: @url,
         sip_username: @sip_caller_username,
         sip_password: @sip_caller_password,
@@ -49,7 +47,7 @@ defmodule AuditKazoo.Router do
 
   get "/telephone" do
     page_contents =
-      EEx.eval_file("libwebphone/telephone.html.eex",
+      EEx.eval_file("lib/audit_kazoo/templates/telephone.html.eex",
         base_url: @url,
         sip_username: @sip_callee_username,
         sip_password: @sip_callee_password,
