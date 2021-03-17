@@ -69,8 +69,22 @@ defmodule API.Channels do
     end
   end
 
-  @spec channel_action(String.t(), map()) :: {:error, any} | {:ok, any}
-  def channel_action(channel_id, %{action: _} = data) do
+  @spec exec_in_a_channel(String.t(), map()) :: {:error, any} | {:ok, any}
+  def exec_in_a_channel(channel_id, %{action: _} = data) do
+    auth_token = Utils.get_auth_token()
+    header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
+    body = Poison.encode!(%{data: data})
+
+    (Utils.build_url_with_account() <> "channels/#{channel_id}")
+    |> HTTPoison.post(body, header)
+    |> case do
+      {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
+      {:error, %{reason: reason}} -> {:error, reason}
+    end
+  end
+
+  @spec channel_metaflow(String.t(), map()) :: {:error, any} | {:ok, any}
+  def channel_metaflow(channel_id, %{action: "metaflow"} = data) do
     auth_token = Utils.get_auth_token()
     header = ["X-Auth-Token": auth_token, "Content-Type": :"application/json"]
     body = Poison.encode!(%{data: data})
