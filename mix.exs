@@ -23,6 +23,7 @@ defmodule AuditKazoo.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      { :elixir_uuid, "~> 1.2" },
       {:wallaby, "~> 0.28.0", runtime: false, only: :test},
       {:plug_cowboy, "~> 2.1"},
       {:poison, "~> 4.0"},

@@ -16,10 +16,6 @@ defmodule AuditKazoo.Router do
   plug(:dispatch)
 
   @url Application.get_env(:audit_kazoo, :base_url)
-  @sip_caller_username Application.get_env(:audit_kazoo, :sip_caller_username)
-  @sip_caller_password Application.get_env(:audit_kazoo, :sip_caller_password)
-  @sip_callee_username Application.get_env(:audit_kazoo, :sip_callee_username)
-  @sip_callee_password Application.get_env(:audit_kazoo, :sip_callee_password)
   @realm Application.get_env(:audit_kazoo, :realm, "realm.com")
 
   get "/" do
@@ -32,26 +28,12 @@ defmodule AuditKazoo.Router do
     send_resp(conn, 200, "ok")
   end
 
-  get "/redphone" do
+  get "/softphone" do
     page_contents =
-      EEx.eval_file("lib/audit_kazoo/templates/redphone.html.eex",
+      EEx.eval_file("lib/audit_kazoo/templates/softphone.html.eex",
         base_url: @url,
-        sip_username: @sip_caller_username,
-        sip_password: @sip_caller_password,
-        realm: @realm
-      )
-
-    conn = Plug.Conn.put_resp_content_type(conn, "text/html")
-    send_resp(conn, 200, page_contents)
-  end
-
-  get "/telephone" do
-    page_contents =
-      EEx.eval_file("lib/audit_kazoo/templates/telephone.html.eex",
-        base_url: @url,
-        sip_username: @sip_callee_username,
-        sip_password: @sip_callee_password,
-        realm: @realm
+        realm: @realm,
+        uuid: UUID.uuid1()
       )
 
     conn = Plug.Conn.put_resp_content_type(conn, "text/html")

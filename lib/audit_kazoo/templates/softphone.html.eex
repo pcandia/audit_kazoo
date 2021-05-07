@@ -405,8 +405,8 @@
             recovery_min_interval: 2,
           },
           authentication: {
-            username: "<%= sip_username %>",
-            password: "<%= sip_password %>",
+            username: "",
+            password: "",
             realm: "<%= realm %>",
           },
           user_agent: {

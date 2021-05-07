@@ -412,7 +412,7 @@
           user_agent: {
             //contact_uri: '',
             //display_name: '',
-            instance_id: "7a4711cd-cf5a-47cb-a56b-3f9298a930ff",
+            instance_id: "<%= uuid %>",
             no_answer_timeout: 60,
             register: true,
             register_expires: 300,
