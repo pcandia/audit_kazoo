@@ -1,8 +1,11 @@
 defmodule AuditKazoo.Router do
+  import Plug.Conn
   use Plug.Router
   use Plug.Debugger, otp_app: :audit_kazoo
 
   require EEx
+
+  alias API.Utils
 
   plug(Plug.Static, at: "/dist", from: "libwebphone/dist/")
   plug(:match)
@@ -29,13 +32,14 @@ defmodule AuditKazoo.Router do
   end
 
   get "/softphone" do
-    page_contents =
-      EEx.eval_file("lib/audit_kazoo/templates/softphone.html.eex",
-        base_url: @url,
-        realm: @realm,
-        uuid: UUID.uuid1()
-      )
+    page_contents = load_page_contents()
+    conn = Plug.Conn.put_resp_content_type(conn, "text/html")
+    send_resp(conn, 200, page_contents)
+  end
 
+  get "/softphone/:user" do
+    %{username: username, password: password} = maybe_get_user_creds(user)
+    page_contents = load_page_contents(username, password)
     conn = Plug.Conn.put_resp_content_type(conn, "text/html")
     send_resp(conn, 200, page_contents)
   end
@@ -52,6 +56,25 @@ defmodule AuditKazoo.Router do
   match _ do
     send_resp(conn, 404, "Oops!")
   end
+
+  defp load_page_contents(username \\ "SIP_USERNAME", password \\ "SIP_PASSWORD") do
+    EEx.eval_file("lib/audit_kazoo/templates/softphone.html.eex",
+      base_url: @url,
+      realm: @realm,
+      username: username,
+      password: password,
+      uuid: UUID.uuid1()
+    )
+  end
+
+  defp maybe_get_user_creds(<<"user_", _::binary>> = user_id) do
+    case Utils.get_devices_creds_by_username(user_id) do
+      :not_found -> maybe_get_user_creds("")
+      user_creds -> user_creds
+    end
+  end
+
+  defp maybe_get_user_creds(_), do: %{username: "", password: ""}
 
   defp decode_body("application/json", body), do: Poison.decode(body, keys: :atoms)
 
