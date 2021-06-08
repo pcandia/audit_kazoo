@@ -41,6 +41,19 @@ defmodule API.QubicleRecipient do
     end
   end
 
+  @spec listing_all_roles() :: {:error, any} | {:ok, any}
+  def listing_all_roles do
+    auth_token = Utils.get_auth_token()
+    header = ["X-Auth-Token": auth_token]
+
+    (Utils.build_url_with_account() <> "qubicle_roles")
+    |> HTTPoison.get(header)
+    |> case do
+      {:ok, %{body: body, status_code: 200}} -> Utils.decode(body)
+      {:error, %{reason: reason}} -> {:error, reason}
+    end
+  end
+
   @spec login_recipient(String.t()) :: {:error, any} | {:ok, any}
   def login_recipient(recipient_id), do: recipient_action(recipient_id, :login)
 
@@ -52,6 +65,9 @@ defmodule API.QubicleRecipient do
 
   @spec wrapup_cancel(String.t()) :: {:error, any} | {:ok, any}
   def wrapup_cancel(recipient_id), do: recipient_action(recipient_id, :wrapup_cancel)
+
+  @spec hangup(String.t()) :: {:error, any} | {:ok, any}
+  def hangup(recipient_id), do: recipient_action(recipient_id, :hangup)
 
   @spec set_recipient_status(String.t(), :login | :logout | :ready | :away) ::
           {:error, any} | {:ok, any}
